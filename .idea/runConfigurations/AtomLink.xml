@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AtomLink" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="atomlink.AtomLink" />
+    <module name="AtomLink" />
+    <option name="PROGRAM_PARAMETERS" value="--key:Sample1 --local-port:25565 --debug" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
