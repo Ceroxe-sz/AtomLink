@@ -1,6 +1,6 @@
 package atomlink.threads;
 
-import asia.ceroxe.utils.Sleeper;
+import plethora.utils.Sleeper;
 import atomlink.AtomLink;
 
 import static atomlink.AtomLink.IS_DEBUG_MODE;

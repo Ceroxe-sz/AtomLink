@@ -1,7 +1,7 @@
 package atomlink;
 
-import asia.ceroxe.management.bufferedFile.BufferedFile;
-import asia.ceroxe.utils.config.LineConfigReader;
+import plethora.management.bufferedFile.BufferedFile;
+import plethora.utils.config.LineConfigReader;
 import atomlink.threads.CheckAliveThread;
 import atomlink.threads.Transformer;
 
