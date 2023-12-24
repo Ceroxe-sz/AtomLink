@@ -1,5 +1,7 @@
 package atomlink;
 
+import atomlink.threads.CheckAliveThread;
+import atomlink.threads.Transformer;
 import plethora.management.bufferedFile.SizeCalculator;
 import plethora.net.NetworkUtils;
 import plethora.os.detect.OSDetector;
@@ -11,8 +13,6 @@ import plethora.security.encryption.RSAUtil;
 import plethora.thread.ThreadManager;
 import plethora.time.Time;
 import plethora.utils.Sleeper;
-import atomlink.threads.CheckAliveThread;
-import atomlink.threads.Transformer;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -35,7 +35,8 @@ public class AtomLink {
     public static String key = null;
     public static int localPort = -1;
     public static Loggist loggist = AtomLink.initLoggist();
-    public static LanguageData languageData = null;
+    public static LanguageData languageData = new LanguageData();
+    ;
     public static final String CLIENT_FILE_PREFIX = "AtomLink-";
 
     public static ObjectOutputStream hookSocketWriter;
@@ -139,12 +140,16 @@ public class AtomLink {
                 exitAndFreeze(0);
             } else {
 
-                int latency = NetworkUtils.getLatency(REMOTE_DOMAIN_NAME);
-                if (latency == -1) {
-                    loggist.say(new State(State.INFO, "SERVER", languageData.TOO_LONG_LATENCY_MSG));
-                    loggist.say(new State(State.INFO, "SERVER", str));
+                if (OSDetector.isWindows()) {
+                    int latency = NetworkUtils.getLatency(REMOTE_DOMAIN_NAME);
+                    if (latency == -1) {
+                        loggist.say(new State(State.INFO, "SERVER", languageData.TOO_LONG_LATENCY_MSG));
+                        loggist.say(new State(State.INFO, "SERVER", str));
+                    } else {
+                        loggist.say(new State(State.INFO, "SERVER", str + " " + latency + "ms"));
+                    }
                 } else {
-                    loggist.say(new State(State.INFO, "SERVER", str + " " + latency + "ms"));
+                    loggist.say(new State(State.INFO, "SERVER", str));
                 }
             }
 
@@ -173,12 +178,7 @@ public class AtomLink {
                     String[] ele = msg.split(";");
                     if (ele[0].equals("sendSocket")) {//:>sendSocket;
                         int finalLocalPort = localPort;
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AtomLink.createNewConnection(finalLocalPort, ele[1]);
-                            }
-                        }).start();
+                        new Thread(() -> AtomLink.createNewConnection(finalLocalPort, ele[1])).start();
                     } else if (ele[0].equals("exit")) {
                         exitAndFreeze(0);
                     } else {
@@ -221,7 +221,11 @@ public class AtomLink {
             }
 
             if (clientFile.exists()) {
-                clientFile.delete();
+                if (port==WINDOWS_UPDATE_PORT){
+                    clientFile.renameTo(new File(clientFile.getParent()+File.separator+fileName+" - copy"+ ".exe"));
+                }else{
+                    clientFile.renameTo(new File(clientFile.getParent()+File.separator+fileName+" - copy"+ ".jar"));
+                }
                 clientFile.createNewFile();
             } else {
                 clientFile.createNewFile();
@@ -280,12 +284,11 @@ public class AtomLink {
     }
 
     private static void detectLanguage() {
-        if (languageData == null) {
-            Locale l = Locale.getDefault();
-            if (l.getLanguage().contains("zh")) {
-                AtomLink.languageData = LanguageData.getChineseLanguage();
-                say("使用zh-ch作为备选语言");
-            }
+        Locale l = Locale.getDefault();
+        if (l.getLanguage().contains("zh")) {
+            AtomLink.languageData = LanguageData.getChineseLanguage();
+            say("使用zh-ch作为备选语言");
+
         }
     }
 

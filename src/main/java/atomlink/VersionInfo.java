@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import static atomlink.AtomLink.IS_DEBUG_MODE;
 
 public class VersionInfo {
-    public static final String VERSION = "5.8-RELEASE";
+    public static final String VERSION = "5.9-RELEASE";
     public static final String AUTHOR = "Ceroxe";
 
     public static void outPutEula() {

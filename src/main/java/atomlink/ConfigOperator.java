@@ -1,9 +1,9 @@
 package atomlink;
 
-import plethora.management.bufferedFile.BufferedFile;
-import plethora.utils.config.LineConfigReader;
 import atomlink.threads.CheckAliveThread;
 import atomlink.threads.Transformer;
+import plethora.management.bufferedFile.BufferedFile;
+import plethora.utils.config.LineConfigReader;
 
 import java.io.BufferedWriter;
 import java.io.File;

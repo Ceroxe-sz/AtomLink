@@ -1,7 +1,7 @@
 package atomlink.threads;
 
-import plethora.utils.Sleeper;
 import atomlink.AtomLink;
+import plethora.utils.Sleeper;
 
 import static atomlink.AtomLink.IS_DEBUG_MODE;
 
